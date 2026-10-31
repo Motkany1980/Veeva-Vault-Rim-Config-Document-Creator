@@ -102,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let docSteps = [];
   let affectedComponents = [];
+  let maximizedStepId = null;
+  let localStepsSavePending = 0;
+  let localCompsSavePending = 0;
   let settings = {
     isRecording: true,
     autoGoToPrefix: true,
@@ -245,10 +248,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('keydown', (e) => {
     const activeTag = (document.activeElement?.tagName || '').toLowerCase();
-    if (activeTag === 'input' || activeTag === 'textarea' || activeTag === 'select') return;
-    if (e.key === 'Escape' && panelActiveMode) {
-      syncModeFromPanel(null, false);
+    if (
+      activeTag === 'input' ||
+      activeTag === 'textarea' ||
+      activeTag === 'select' ||
+      document.activeElement?.isContentEditable
+    ) {
+      if (e.key === 'Escape' && maximizedStepId) {
+        e.preventDefault();
+        maximizedStepId = null;
+        renderSteps();
+      }
       return;
+    }
+    if (e.key === 'Escape') {
+      if (maximizedStepId) {
+        e.preventDefault();
+        maximizedStepId = null;
+        renderSteps();
+        return;
+      }
+      if (panelActiveMode) {
+        syncModeFromPanel(null, false);
+        return;
+      }
     }
     const m = getPanelKeyMode(e);
     if (m) {
@@ -308,11 +331,18 @@ document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.onChanged.addListener((changes, area) => {
     if (area === 'local') {
       if (changes.docSteps) {
+        if (localStepsSavePending > 0) {
+          // Ignore self-triggered storage change so active textarea never loses focus or resize height
+          return;
+        }
         docSteps = changes.docSteps.newValue || [];
         renderSteps();
         renderDocPreview();
       }
       if (changes.affectedComponents) {
+        if (localCompsSavePending > 0) {
+          return;
+        }
         affectedComponents = changes.affectedComponents.newValue || [];
         renderComponents();
         renderDocPreview();
@@ -664,11 +694,21 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.set({ settings });
   }
   function saveSteps() {
-    chrome.storage.local.set({ docSteps });
+    localStepsSavePending++;
+    chrome.storage.local.set({ docSteps }, () => {
+      setTimeout(() => {
+        localStepsSavePending = Math.max(0, localStepsSavePending - 1);
+      }, 120);
+    });
     renderDocPreview();
   }
   function saveComponents() {
-    chrome.storage.local.set({ affectedComponents });
+    localCompsSavePending++;
+    chrome.storage.local.set({ affectedComponents }, () => {
+      setTimeout(() => {
+        localCompsSavePending = Math.max(0, localCompsSavePending - 1);
+      }, 120);
+    });
     renderDocPreview();
   }
 
@@ -949,19 +989,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLastStepText = docSteps[docSteps.length - 1]?.type === 'text';
 
     docSteps.forEach((step, idx) => {
+      if (!step.id) {
+        step.id = 'step_' + idx + '_' + Date.now();
+      }
       const isActiveTarget = idx === docSteps.length - 1 && isLastStepText;
-      const isCollapsed = Boolean(step.collapsed);
+      const isMaximized = maximizedStepId === step.id;
+      const isCollapsed = isMaximized ? false : Boolean(step.collapsed);
       const card = document.createElement('div');
       card.className = `step-card ${step.type === 'image' ? 'image-step' : 'text-step'}${
         isActiveTarget ? ' active-target' : ''
-      }${isCollapsed ? ' collapsed' : ''}`;
+      }${isCollapsed ? ' collapsed' : ''}${isMaximized ? ' maximized-step' : ''}`;
 
       const header = document.createElement('div');
       header.className = 'step-header';
 
       const titleWrap = document.createElement('div');
       titleWrap.className = 'step-title-clickable';
-      titleWrap.title = 'Click to collapse / expand step';
+      titleWrap.title = isMaximized
+        ? 'Click Restore to exit fullscreen'
+        : 'Click to collapse / expand step';
 
       const caret = document.createElement('span');
       caret.className = 'vv-caret';
@@ -997,6 +1043,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bodyWrap.className = 'step-body';
 
       titleWrap.addEventListener('click', () => {
+        if (maximizedStepId === step.id) return;
         step.collapsed = !step.collapsed;
         const nowCollapsed = Boolean(step.collapsed);
         card.classList.toggle('collapsed', nowCollapsed);
@@ -1012,6 +1059,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const actions = document.createElement('div');
       actions.className = 'step-actions';
+
+      const btnMaximize = document.createElement('button');
+      btnMaximize.className = `btn-mini btn-maximize${isMaximized ? ' active-max' : ''}`;
+      btnMaximize.textContent = isMaximized ? '↙ Restore' : '⛶ Fullscreen';
+      btnMaximize.title = isMaximized
+        ? 'Restore step to normal view (Esc)'
+        : 'Expand step to fill the entire screen';
+      btnMaximize.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (maximizedStepId === step.id) {
+          maximizedStepId = null;
+        } else {
+          maximizedStepId = step.id;
+          step.collapsed = false;
+        }
+        renderSteps();
+      });
+      actions.appendChild(btnMaximize);
 
       if (step.type === 'image') {
         const btnEditImg = document.createElement('button');
@@ -1059,12 +1124,44 @@ document.addEventListener('DOMContentLoaded', () => {
         textarea.className = 'step-textarea';
         textarea.value = step.text || '';
         textarea.placeholder = 'Click with 0+Click in Veeva Vault or type directly here...';
-        textarea.rows = Math.max(2, (step.text || '').split('\n').length);
+        const lineCount = (step.text || '').split('\n').length;
+        textarea.rows = Math.max(isActiveTarget ? 4 : 3, Math.min(12, lineCount));
+
+        if (!isMaximized && step.customHeight) {
+          textarea.style.height = step.customHeight;
+        }
+
+        // Stop key events from bubbling to any global shortcut listeners while typing
+        textarea.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && maximizedStepId === step.id) {
+            ev.preventDefault();
+            maximizedStepId = null;
+            renderSteps();
+            return;
+          }
+          ev.stopPropagation();
+        });
+
+        textarea.addEventListener('keyup', (ev) => {
+          ev.stopPropagation();
+        });
 
         textarea.addEventListener('input', () => {
           docSteps[idx].text = textarea.value;
-          textarea.rows = Math.max(2, textarea.value.split('\n').length);
+          if (!isMaximized && !docSteps[idx].customHeight) {
+            if (textarea.scrollHeight > textarea.clientHeight) {
+              textarea.style.height = textarea.scrollHeight + 'px';
+            }
+          }
           saveSteps();
+        });
+
+        // Persist user's manual drag-resize height so it never snaps back
+        textarea.addEventListener('mouseup', () => {
+          if (!isMaximized && textarea.style.height) {
+            docSteps[idx].customHeight = textarea.style.height;
+            saveSteps();
+          }
         });
 
         const quickRow = document.createElement('div');
@@ -1097,12 +1194,15 @@ document.addEventListener('DOMContentLoaded', () => {
             docSteps[idx].text = t.slice(0, t.lastIndexOf(' > '));
           }
           textarea.value = docSteps[idx].text;
-          textarea.rows = Math.max(2, textarea.value.split('\n').length);
           saveSteps();
         });
         quickRow.appendChild(btnStripLast);
 
         bodyWrap.append(textarea, quickRow);
+
+        if (isMaximized) {
+          setTimeout(() => textarea.focus(), 20);
+        }
       } else if (step.type === 'image') {
         const imgWrap = document.createElement('div');
         imgWrap.className = 'screenshot-preview-wrap';
@@ -1231,8 +1331,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function appendTextToStep(idx, textarea, snippet) {
     docSteps[idx].text = (docSteps[idx].text || '') + snippet;
     textarea.value = docSteps[idx].text;
-    textarea.rows = Math.max(2, textarea.value.split('\n').length);
+    if (maximizedStepId !== docSteps[idx].id && !docSteps[idx].customHeight) {
+      if (textarea.scrollHeight > textarea.clientHeight) {
+        textarea.style.height = textarea.scrollHeight + 'px';
+      }
+    }
     textarea.focus();
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
     saveSteps();
   }
 
@@ -1247,6 +1352,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function deleteStep(idx) {
+    if (docSteps[idx] && docSteps[idx].id === maximizedStepId) {
+      maximizedStepId = null;
+    }
     docSteps.splice(idx, 1);
     saveSteps();
     renderSteps();

@@ -831,19 +831,114 @@ textarea:focus {
   border-color: #ef9a9a;
 }
 
+.btn-mini.btn-maximize {
+  background: #f4f5f7;
+  color: #2b3643;
+  border-color: #b8c2cc;
+  font-weight: 700;
+}
+
+.btn-mini.btn-maximize:hover {
+  background: var(--vv-orange);
+  color: #ffffff;
+  border-color: #d97a0b;
+}
+
+.btn-mini.btn-maximize.active-max {
+  background: var(--vv-orange);
+  color: #ffffff;
+  border-color: #d97a0b;
+  padding: 2px 8px;
+}
+
 .step-textarea,
 .vv-code-area {
   width: 100%;
-  min-height: 44px;
+  min-height: 68px;
   resize: vertical;
   border: 1px solid var(--vv-border-strong);
   border-radius: 2px;
-  padding: 4px 6px;
+  padding: 6px 8px;
   font-family: Consolas, "Courier New", monospace;
   font-size: var(--vv-base-font);
-  line-height: 1.4;
+  line-height: 1.45;
   color: #2b3643;
-  background: #fafbfc;
+  background: #ffffff;
+}
+
+.step-card.active-target .step-textarea {
+  min-height: 92px;
+  border-color: #90caf9;
+}
+
+/* Maximized / Fullscreen Step Card */
+.step-card.maximized-step {
+  position: fixed;
+  top: 34px;
+  left: 0;
+  right: 0;
+  bottom: 39px;
+  z-index: 1500;
+  margin: 0 !important;
+  border-radius: 0;
+  border: none;
+  border-top: 2px solid var(--vv-orange);
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  padding: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+
+.step-card.maximized-step .step-header {
+  padding: 6px 10px;
+  margin-bottom: 0;
+  background: #2b3643;
+  color: #ffffff;
+  border-bottom: 1px solid #4a5568;
+  flex-shrink: 0;
+}
+
+.step-card.maximized-step .step-badge,
+.step-card.maximized-step .vv-caret {
+  color: #ffffff;
+}
+
+.step-card.maximized-step .step-body {
+  flex: 1;
+  display: flex !important;
+  flex-direction: column;
+  padding: 8px 10px;
+  overflow: hidden;
+  background: #f4f5f7;
+}
+
+.step-card.maximized-step .step-textarea {
+  flex: 1;
+  height: 100% !important;
+  min-height: 0 !important;
+  resize: none;
+  font-size: calc(var(--vv-base-font) + 1.5px);
+  line-height: 1.55;
+  padding: 8px 10px;
+  background: #ffffff;
+  border: 1px solid var(--vv-border-strong);
+}
+
+.step-card.maximized-step .step-quick-inserts {
+  margin-top: 6px;
+  padding-top: 4px;
+  flex-shrink: 0;
+}
+
+.step-card.maximized-step .screenshot-preview-wrap {
+  flex: 1;
+  max-height: none;
+  margin-bottom: 6px;
+}
+
+.step-card.maximized-step .screenshot-preview-wrap img {
+  max-height: 100%;
 }
 
 .step-quick-inserts,
