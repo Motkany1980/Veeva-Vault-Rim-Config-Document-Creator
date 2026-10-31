@@ -736,10 +736,12 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ type: 'UNDO_LAST_SEGMENT' });
   });
 
-  btnOpenMockPage.addEventListener('click', () => {
-    const mockUrl = chrome.runtime.getURL('test-veeva-mock.html');
-    chrome.tabs.create({ url: mockUrl });
-  });
+  if (btnOpenMockPage) {
+    btnOpenMockPage.addEventListener('click', () => {
+      const mockUrl = chrome.runtime.getURL('test-veeva-mock.html');
+      chrome.tabs.create({ url: mockUrl });
+    });
+  }
 
   btnClearAll.addEventListener('click', () => {
     if (docSteps.length === 0) return;
@@ -969,7 +971,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="empty-state">
           <h3>No configuration steps recorded yet</h3>
           <p>
-            Open Veeva Vault (or click the <strong>Test Page</strong> button above) and click on elements:<br/><br/>
+            Open Veeva Vault and click on elements while holding a shortcut key:<br/><br/>
             &bull; <strong>0 + Left Click</strong>: Append element label with <code>&nbsp;&gt;&nbsp;</code><br/>
             &bull; <strong>1 + Left Click</strong>: Start a new line (skipping 1 blank line)<br/>
             &bull; <strong>2 + Left Click</strong>: Capture &amp; insert screenshot<br/>
