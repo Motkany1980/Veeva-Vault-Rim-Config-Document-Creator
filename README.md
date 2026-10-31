@@ -4,7 +4,6 @@ Chrome and Microsoft Edge browser extension (Manifest V3) for Veeva Vault Admini
 
 > **Read-Only Guarantee:** All communication with Veeva Vault REST APIs is strictly **read-only** (`GET` and `VQL SELECT` queries only). The extension never creates, updates, or deletes data in Vault.
 
-https://github.com/Motkany1980/Veeva-Vault-Rim-Config-Document-Creator/blob/main/Images/Veeva%20Documentator%201.png
 ---
 
 ## Features
