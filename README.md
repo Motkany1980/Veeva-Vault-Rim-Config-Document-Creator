@@ -1,5 +1,3 @@
-# Veeva-Vault-Rim-Config-Document-Creator
-
 # Veeva Vault RIM Config Documenter
 
 Chrome and Microsoft Edge browser extension (Manifest V3) for Veeva Vault Administrators and Configuration Engineers. It records configuration steps, UI navigation paths, screenshots, and modified components (`vault_component__v`) while you work in Vault, and exports everything into a formatted Microsoft Word (`.docx`) document.

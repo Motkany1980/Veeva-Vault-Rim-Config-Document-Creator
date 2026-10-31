@@ -1,0 +1,115 @@
+/* content.css - Veeva Vault Sunrise UI Style In-Page Overlays */
+
+.vv-doc-highlight-target {
+  outline: 2px solid #f7941d !important;
+  outline-offset: 1px !important;
+  background-color: rgba(247, 148, 29, 0.08) !important;
+}
+
+.vv-doc-screenshot-box {
+  outline: 2px solid #c62828 !important;
+  outline-offset: 2px !important;
+}
+
+#vv-doc-cursor-tooltip {
+  position: fixed;
+  z-index: 2147483647;
+  pointer-events: none;
+  background: #2b3643;
+  color: #ffffff;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  padding: 5px 9px;
+  border-radius: 2px;
+  border-top: 2px solid #f7941d;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  max-width: 460px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+}
+
+#vv-doc-cursor-tooltip .vv-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 2px;
+  margin-right: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #f7941d;
+}
+
+#vv-doc-toast {
+  position: fixed;
+  bottom: 48px;
+  right: 16px;
+  z-index: 2147483646;
+  pointer-events: none;
+  background: #2b3643;
+  color: #ffffff;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 12px;
+  padding: 7px 12px;
+  border-radius: 2px;
+  border-left: 3px solid #f7941d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  max-width: 480px;
+}
+
+#vv-doc-toast.vv-show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#vv-doc-floating-hud {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  z-index: 2147483645;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #2b3643;
+  color: #ffffff;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 2px;
+  border-top: 2px solid #f7941d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  user-select: none;
+}
+
+#vv-doc-floating-hud .vv-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf50;
+}
+
+#vv-doc-floating-hud.vv-paused .vv-dot {
+  background: #9aa5b1;
+}
+
+#vv-doc-floating-hud .vv-hud-key {
+  padding: 2px 6px;
+  border-radius: 2px;
+  background: #3b4859;
+  border: 1px solid #4a5568;
+  color: #e2e8f0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#vv-doc-floating-hud .vv-hud-key.vv-active-key {
+  background: #f7941d;
+  border-color: #d97a0b;
+  color: #ffffff;
+}

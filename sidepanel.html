@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veeva Vault RIM Config Documenter</title>
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body class="font-compact">
+  <!-- Veeva Vault Style Compact Top Header Bar -->
+  <header class="vv-header">
+    <div class="vv-brand">
+      <img src="icons/icon.svg" alt="Vault Icon" class="vv-brand-icon" />
+      <div class="vv-brand-text">
+        <span class="vv-brand-name">Vault RIM</span>
+        <span class="vv-brand-sep">|</span>
+        <span class="vv-brand-module">Config Doc</span>
+      </div>
+    </div>
+    <div class="vv-header-actions">
+      <div class="vv-font-controls" title="Adjust font size and UI density">
+        <button id="btnFontSmaller" class="vv-header-btn" title="Smaller font size">A-</button>
+        <button id="btnFontLarger" class="vv-header-btn" title="Larger font size">A+</button>
+      </div>
+      <button id="btnPopoutWindow" class="vv-header-btn" title="Open in a separate resizable floating window">
+        Pop-out Window
+      </button>
+      <button id="btnResetEverythingHeader" class="vv-header-btn vv-header-btn-danger" title="Reset and clear all steps, screenshots, components, and entered fields">
+        Reset All
+      </button>
+      <button id="btnToggleRecord" class="vv-status-toggle active" title="Toggle recording on/off">
+        <span class="vv-status-indicator"></span>
+        <span id="recordStatusText">Active</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Collapsible Section 1: Veeva Session / SSID Bar -->
+  <section class="vv-section">
+    <div class="vv-section-header" id="toggleAuthPanel">
+      <div class="vv-session-info">
+        <span class="vv-caret" id="caretAuth">▸</span>
+        <span class="vv-section-title">SSID CONNECTION</span>
+        <span id="ssidBadge" class="vv-badge vv-badge-inactive">Not Connected</span>
+        <span class="vv-badge vv-badge-readonly" title="Strictly Read-Only (GET / VQL SELECT) queries">READ-ONLY</span>
+        <span id="connectedVaultLabel" class="vv-dns-text"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <button id="btnQuickAutoSsid" class="vv-btn-inline" title="Auto-detect SSID from active Veeva Vault tab">Auto-SSID</button>
+      </div>
+    </div>
+
+    <div id="authPanelBody" class="vv-section-body collapsed">
+      <div class="vv-subtabs">
+        <button class="auth-tab active" data-tab="ssid">Session ID (SSID)</button>
+        <button class="auth-tab" data-tab="credentials">Username / Password</button>
+      </div>
+
+      <div class="vv-field-group">
+        <label for="inputVaultDns">Vault DNS (Domain)</label>
+        <div class="vv-input-group">
+          <input type="text" id="inputVaultDns" placeholder="mycompany-rim.veevavault.com" />
+          <button id="btnAutoDetectSsid" class="vv-btn vv-btn-secondary">
+            Auto-Detect SSID
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1: SSID -->
+      <div id="tabContentSsid" class="tab-content active">
+        <div class="vv-field-group">
+          <label for="inputSsid">Session ID (SSID)</label>
+          <div class="vv-input-group">
+            <input type="password" id="inputSsid" placeholder="Paste your Session ID..." />
+            <button id="btnShowSsid" class="vv-btn vv-btn-secondary" type="button">Show</button>
+          </div>
+        </div>
+        <div class="vv-action-row">
+          <button id="btnVerifySsid" class="vv-btn vv-btn-primary">Connect with SSID</button>
+        </div>
+      </div>
+
+      <!-- Tab 2: Username / Password -->
+      <div id="tabContentCredentials" class="tab-content">
+        <div class="vv-field-group">
+          <label for="inputUsername">Vault Username</label>
+          <input type="text" id="inputUsername" placeholder="user@company.veevavault.com" />
+        </div>
+        <div class="vv-field-group">
+          <label for="inputPassword">Password</label>
+          <input type="password" id="inputPassword" placeholder="••••••••" />
+        </div>
+        <div class="vv-action-row">
+          <button id="btnLoginVault" class="vv-btn vv-btn-primary">Sign In (Read-Only)</button>
+        </div>
+      </div>
+
+      <div id="authFeedback" class="vv-feedback"></div>
+    </div>
+  </section>
+
+  <!-- Collapsible Section 2: Controls & Settings -->
+  <section class="vv-section">
+    <div class="vv-section-header" id="toggleShortcutsPanel">
+      <div class="vv-session-info">
+        <span class="vv-caret" id="caretShortcuts">▾</span>
+        <span class="vv-section-title">CONTROLS &amp; SETTINGS</span>
+      </div>
+      <span style="font-size:10px;color:#5e6c84;">Click header to collapse/expand</span>
+    </div>
+
+    <div id="shortcutsPanelBody">
+      <details id="detailsKeymapBar" class="vv-settings-panel vv-keymap-details" open>
+        <summary>Keyboard &amp; Mouse Shortcuts (0&ndash;4 + Left Click)</summary>
+        <div class="vv-keymap-bar">
+          <div class="vv-key-item" data-mode="0" title="0 + Left Click (or click here to lock mode): Append label with ' > '">
+            <kbd>0+Click</kbd>
+            <span>Chain (<code>&gt;</code>)</span>
+          </div>
+          <div class="vv-key-item" data-mode="1" title="1 + Left Click (or click here): Start a new line with 1 blank line skipped">
+            <kbd>1+Click</kbd>
+            <span>New Line</span>
+          </div>
+          <div class="vv-key-item" data-mode="2" title="2 + Left Click (or click here): Capture and insert screenshot">
+            <kbd>2+Click</kbd>
+            <span>+Shot</span>
+          </div>
+          <div class="vv-key-item" data-mode="3" title="3 + Left Click (or click here): Indented sub-item (   > Item)">
+            <kbd>3+Click</kbd>
+            <span>Sub-item (<code>&gt;</code>)</span>
+          </div>
+          <div class="vv-key-item" data-mode="4" title="4 + Left Click (or click here): Record affected component into Components list">
+            <kbd>4+Click</kbd>
+            <span>+Comp</span>
+          </div>
+        </div>
+      </details>
+
+      <details class="vv-settings-panel">
+        <summary>Recording &amp; Document Options</summary>
+        <div class="vv-settings-body">
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkAutoGoTo" checked />
+            <span>Automatically prefix <strong>"Go to "</strong> to the first clicked navigation item of a line <em>(e.g. Admin &rarr; Go to Admin, Objects &rarr; Go to Objects)</em></span>
+          </label>
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkPassClick" checked />
+            <span>Pass click through to Vault (Navigate while recording)</span>
+          </label>
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkIncludeApiNames" checked />
+            <span>Automatically append technical API names (e.g. <code>comparison_table__c</code>)</span>
+          </label>
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkHighlightScreenshot" />
+            <span>Highlight clicked element with red border on <code>2 + Click</code> screenshots</span>
+          </label>
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkAppendComponents" checked />
+            <span>Append <strong>Components :</strong> section to the end of the Word document</span>
+          </label>
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkShowHud" checked />
+            <span>Show floating helper bar in the bottom-right corner of the Veeva page</span>
+          </label>
+
+          <div class="vv-field-group" style="margin-top:4px;">
+            <label for="selMode1Style"><strong>1 + Left Click</strong> behavior:</label>
+            <select id="selMode1Style">
+              <option value="blank_line">New line with 1 empty line skipped (Default)</option>
+              <option value="new_block">Create a separate new step card</option>
+              <option value="sub_item">Indented sub-item (   &gt; Item)</option>
+            </select>
+          </div>
+
+          <div class="vv-field-group">
+            <label for="selComponentsFormat"><strong>Components :</strong> format at the end of Word (.docx):</label>
+            <select id="selComponentsFormat">
+              <option value="text">Text block format (Name / Component Name / Type / Date)</option>
+              <option value="both">Text block + Formatted summary table</option>
+              <option value="table">Formatted summary table only</option>
+            </select>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Collapsible Section 3: Cycle, Requester, Developer & Original Request (Saved at top of Document) -->
+  <section class="vv-section">
+    <div class="vv-section-header" id="toggleRequestMetaPanel">
+      <div class="vv-session-info">
+        <span class="vv-caret" id="caretRequestMeta">▾</span>
+        <span class="vv-section-title">CYCLE, REQUESTER, DEVELOPER &amp; ORIGINAL REQUEST</span>
+        <span id="requestMetaSummary" class="vv-dns-text"></span>
+      </div>
+      <span style="font-size:10px;color:#5e6c84;">Placed at top of document</span>
+    </div>
+
+    <div id="requestMetaPanelBody" class="vv-section-body">
+      <div class="vv-input-group">
+        <div class="vv-field-group" style="flex:1;">
+          <label for="inputCycleName">Cycle / Release Name</label>
+          <input type="text" id="inputCycleName" placeholder="e.g. 2026 R2 / Cycle 3" />
+        </div>
+        <div class="vv-field-group" style="flex:1;">
+          <label for="inputRequesterName">Requester Name</label>
+          <input type="text" id="inputRequesterName" placeholder="e.g. Jane Doe" />
+        </div>
+        <div class="vv-field-group" style="flex:1;">
+          <label for="inputDeveloperName">Developer Name</label>
+          <input type="text" id="inputDeveloperName" placeholder="e.g. John Smith" />
+        </div>
+      </div>
+      <div class="vv-field-group" style="margin-bottom:0;">
+        <label for="textareaOriginalRequest">Original Request Description</label>
+        <textarea
+          id="textareaOriginalRequest"
+          class="step-textarea"
+          rows="2"
+          placeholder="Paste the original request / requirement text here (formatted at the beginning of the Word document)..."
+        ></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Veeva Sunrise Primary Navigation Tabs -->
+  <nav class="vv-nav-tabs">
+    <button class="ws-tab active" data-wstab="steps">
+      Steps (<span id="countSteps">0</span>)
+    </button>
+    <button class="ws-tab" data-wstab="components">
+      Components (<span id="countComponents">0</span>)
+    </button>
+    <button class="ws-tab" data-wstab="preview">
+      Preview
+    </button>
+    <button class="ws-tab" data-wstab="adminpro">
+      VQL &amp; Project
+    </button>
+  </nav>
+
+  <!-- VIEW 1: CONFIGURATION STEPS & SCREENSHOTS -->
+  <div id="viewSteps" class="ws-view active">
+    <div class="vv-action-bar">
+      <button id="btnAddTextStep" class="vv-btn vv-btn-primary" title="Add a new empty step card">+ Step</button>
+      <button id="btnTakeScreenshotNow" class="vv-btn vv-btn-secondary" title="Capture screenshot from the active Vault tab">+ Screenshot</button>
+      <button id="btnUndoLast" class="vv-btn vv-btn-secondary" title="Undo the last appended ' > Item' or screenshot">Undo</button>
+      <button id="btnToggleAllCards" class="vv-btn vv-btn-secondary" title="Collapse or expand all step cards">Collapse All</button>
+      <button id="btnLoadSample" class="vv-btn vv-btn-secondary" title="Load sample steps and components">Sample</button>
+      <button id="btnOpenMockPage" class="vv-btn vv-btn-secondary" title="Open the interactive Veeva Vault sandbox test page">Test Page</button>
+      <button id="btnClearAll" class="vv-btn vv-btn-danger-link" title="Clear all recorded steps">Clear</button>
+    </div>
+
+    <main id="stepsContainer" class="vv-list-container"></main>
+  </div>
+
+  <!-- VIEW 2: AFFECTED COMPONENTS (vault_component__v) -->
+  <div id="viewComponents" class="ws-view">
+    <div class="vv-section-header" id="toggleCompQueryPanel" style="border-top:none;">
+      <div class="vv-session-info">
+        <span class="vv-caret" id="caretCompQuery">▾</span>
+        <span class="vv-section-title">COMPONENT QUERY (READ-ONLY VQL / PAGE SCAN)</span>
+      </div>
+    </div>
+    <div id="compQueryPanelBody" class="vv-filter-panel">
+      <div class="vv-input-group" style="margin-bottom:5px;">
+        <select id="selCompQueryMode">
+          <option value="from_steps">Components referenced in recorded steps</option>
+          <option value="recent_today">Components modified today (Modified Today)</option>
+          <option value="recent_1h">Components modified in the last 1 hour</option>
+          <option value="dom_scan">Scan component table on active Veeva page</option>
+        </select>
+      </div>
+      <div class="vv-input-group">
+        <input type="text" id="inputCompSearch" placeholder="Filter by label, component name, or type (e.g. dienog, Report)..." />
+        <button id="btnQueryComponents" class="vv-btn vv-btn-primary">Query</button>
+      </div>
+      <div id="compQueryFeedback" class="vv-feedback"></div>
+    </div>
+
+    <div class="vv-action-bar">
+      <button id="btnAddComponentManual" class="vv-btn vv-btn-secondary">+ Component</button>
+      <button id="btnToggleAllComps" class="vv-btn vv-btn-secondary">Collapse All</button>
+      <button id="btnLoadSampleComponents" class="vv-btn vv-btn-secondary">Sample</button>
+      <button id="btnCopyComponentsBlock" class="vv-btn vv-btn-secondary">Copy</button>
+      <button id="btnClearComponents" class="vv-btn vv-btn-danger-link">Clear</button>
+    </div>
+
+    <div id="componentsContainer" class="vv-list-container"></div>
+  </div>
+
+  <!-- VIEW 3: FULL DOCUMENT PREVIEW -->
+  <div id="viewPreview" class="ws-view">
+    <div class="vv-action-bar">
+      <span style="font-size:10.5px;font-weight:700;color:#42526e;align-self:center;">
+        Live Document Preview (Exact layout exported to Word)
+      </span>
+    </div>
+    <div id="docPreviewContainer" class="vv-preview-sheet"></div>
+  </div>
+
+  <!-- VIEW 4: DEPLOYMENT & VQL TOOLS -->
+  <div id="viewAdminPro" class="ws-view">
+    <div class="vv-list-container">
+      <!-- Document & Change Metadata -->
+      <div class="vv-card">
+        <div class="vv-card-header collapsible-card-header" data-target="cardBodyDocMeta">
+          <span class="vv-card-title"><span class="vv-caret">▾</span> DOCUMENT TITLE &amp; CHANGE TICKET</span>
+        </div>
+        <div id="cardBodyDocMeta" class="vv-card-body">
+          <div class="vv-field-group">
+            <label for="inputDocTitle">Document Header Title</label>
+            <input type="text" id="inputDocTitle" value="Veeva Vault RIM Configuration Steps" />
+          </div>
+          <div class="vv-input-group">
+            <div class="vv-field-group" style="flex:1;">
+              <label for="inputTicketId">Change / Jira Ticket ID</label>
+              <input type="text" id="inputTicketId" placeholder="e.g. RIM-2048" />
+            </div>
+            <div class="vv-field-group" style="flex:1;">
+              <label for="selEnvironment">Environment</label>
+              <select id="selEnvironment">
+                <option value="Sandbox">Sandbox</option>
+                <option value="Development">Development</option>
+                <option value="Validation">Validation (VAL)</option>
+                <option value="Production">Production (PROD)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VQL Query Builder -->
+      <div class="vv-card">
+        <div class="vv-card-header collapsible-card-header" data-target="cardBodyVql">
+          <span class="vv-card-title"><span class="vv-caret">▾</span> VQL QUERY (FOR VAULT-TOOLBOX)</span>
+          <button id="btnGenerateVql" class="vv-btn-inline">Refresh</button>
+        </div>
+        <div id="cardBodyVql" class="vv-card-body">
+          <textarea id="textareaVqlOutput" class="vv-code-area" rows="3" readonly></textarea>
+          <div class="vv-inline-actions" style="margin-top:5px;">
+            <button id="btnCopyVql">Copy VQL</button>
+            <button id="btnCopyConfluence">Copy Confluence / Jira Table</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Backup -->
+      <div class="vv-card">
+        <div class="vv-card-header collapsible-card-header" data-target="cardBodyJson">
+          <span class="vv-card-title"><span class="vv-caret">▾</span> SAVE &amp; LOAD SESSION (.JSON)</span>
+        </div>
+        <div id="cardBodyJson" class="vv-card-body">
+          <div class="vv-input-group" style="margin-top:4px;">
+            <button id="btnExportJson" class="vv-btn vv-btn-secondary" style="flex:1;">Export (.json)</button>
+            <button id="btnImportJson" class="vv-btn vv-btn-secondary" style="flex:1;">Import (.json)</button>
+            <input type="file" id="fileInputJson" accept=".json" style="display:none;" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screenshot Annotator Modal -->
+  <div id="annotatorModal" class="vv-modal-backdrop" style="display:none;">
+    <div class="vv-modal">
+      <div class="vv-modal-header">
+        <span>Annotate / Redact Screenshot</span>
+        <button id="btnCloseAnnotator" class="vv-modal-close">&times;</button>
+      </div>
+      <div class="vv-annotator-bar">
+        <button class="ann-tool active" data-tool="rect">Red Box</button>
+        <button class="ann-tool" data-tool="arrow">Arrow</button>
+        <button class="ann-tool" data-tool="badge">Number Badge (1, 2...)</button>
+        <button class="ann-tool" data-tool="redact">Redact (Mask)</button>
+        <button id="btnAnnotatorUndo" class="vv-btn-inline" style="margin-left:auto;">Undo</button>
+      </div>
+      <div class="vv-annotator-stage">
+        <canvas id="annotatorCanvas"></canvas>
+      </div>
+      <div class="vv-modal-footer">
+        <button id="btnCancelAnnotator" class="vv-btn vv-btn-secondary">Cancel</button>
+        <button id="btnSaveAnnotator" class="vv-btn vv-btn-primary">Save Annotations</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Action Bar -->
+  <footer class="vv-footer">
+    <button id="btnResetEverythingFooter" class="vv-btn vv-btn-danger-outline" title="Clear all steps, screenshots, components, and entered fields">
+      Reset All
+    </button>
+    <button id="btnCopyText" class="vv-btn vv-btn-secondary" title="Copy full configuration steps and Components block to clipboard">
+      Copy Text
+    </button>
+    <button id="btnExportDocx" class="vv-btn vv-btn-primary vv-btn-export">
+      Download Word (.docx)
+    </button>
+  </footer>
+
+  <script src="docx-generator.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
