@@ -31,6 +31,7 @@ Chrome and Microsoft Edge browser extension (Manifest V3) for Veeva Vault Admini
 
 ## Features
 
+- **Implement searchable dropdown fields** for the **Object** and **Field tables** in Veeva Vault RIM Admin → Configuration → Objects, allowing users to quickly search and select Object and Field values.
 - **Click-to-Document Navigation Paths:** Hold number keys (`0`–`4`) while clicking elements in Veeva Vault to chain steps (`Go to Admin > Configuration > Document Types`), start new lines, add indented sub-items, take screenshots, or log components.
 - **Automatic API Name Extraction:** Detects technical API names (`__c`, `__v`, `__sys`, `__rim`) displayed next to labels and appends them automatically (e.g., `Comparison Table (comparison_table__c)`).
 - **In-Browser Screenshot Capture & Annotation:** Captures the active Vault tab on `2 + Left Click` and includes a built-in editor to draw red highlight boxes, arrows, numbered badges, or redact sensitive text.
