@@ -1,17 +1,23 @@
-/* sidepanel.css - Veeva Vault (Sunrise UI / Admin) Enterprise Compact & Collapsible Styling */
+/* sidepanel.css - Authentic Veeva Vault RIM (Sunrise UI) Styling */
 
 :root {
   --vv-orange: #f7941d;
   --vv-orange-hover: #e07f0b;
-  --vv-header-bg: #2b3643;
-  --vv-blue: #1a73e8;
-  --vv-bg: #f4f5f7;
+  --vv-navy: #14233c;
+  --vv-navy-light: #1e3252;
+  --vv-header-bg: #14233c;
+  --vv-blue: #1959a8;
+  --vv-blue-hover: #144787;
+  --vv-link-blue: #1662b4;
+  --vv-bg: #f5f6f8;
   --vv-surface: #ffffff;
-  --vv-section-bar: #eaeced;
+  --vv-section-bar: #f2f3f5;
   --vv-border: #d8dde6;
-  --vv-border-strong: #c5ccd6;
-  --vv-text: #333333;
-  --vv-text-muted: #5e6c84;
+  --vv-border-strong: #bdbdbd;
+  --vv-text: #222222;
+  --vv-text-muted: #555555;
+  --vv-active-input-bg: #fffde7;
+  --vv-selected-cell-bg: #fdf2e4;
   --vv-success: #2e7d32;
   --vv-danger: #c62828;
   --vv-base-font: 11px;
@@ -52,16 +58,16 @@ body {
   overflow: hidden;
 }
 
-/* Veeva Top Navigation Bar */
+/* Authentic Veeva Vault RIM Top Navy Bar (#14233C) */
 .vv-header {
-  background: var(--vv-header-bg);
+  background: linear-gradient(180deg, #172844 0%, #122037 100%);
   color: #ffffff;
-  height: 34px;
-  padding: 0 8px;
+  height: 36px;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 3px solid var(--vv-orange);
+  border-bottom: 1px solid #0d1728;
   flex-shrink: 0;
   gap: 6px;
 }
@@ -73,35 +79,42 @@ body {
   min-width: 0;
 }
 
-.vv-brand-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
 .vv-brand-text {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: calc(var(--vv-base-font) + 0.5px);
+  align-items: baseline;
+  gap: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.vv-brand-name {
-  font-weight: 700;
+.vv-logo-veeva {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: calc(var(--vv-base-font) + 3.5px);
+  font-weight: 800;
   color: var(--vv-orange);
+  letter-spacing: -0.4px;
+}
+
+.vv-logo-rim {
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+  font-size: calc(var(--vv-base-font) + 3.5px);
+  font-weight: 300;
+  color: #ffffff;
+  margin-left: 1px;
+  letter-spacing: -0.2px;
 }
 
 .vv-brand-sep {
-  color: #7a869a;
+  color: #5c7091;
+  margin: 0 5px;
+  font-size: var(--vv-base-font);
 }
 
 .vv-brand-module {
   font-weight: 600;
-  color: #ffffff;
+  font-size: calc(var(--vv-base-font) - 0.5px);
+  color: #dbe4f0;
 }
 
 .vv-header-actions {
@@ -113,18 +126,18 @@ body {
 
 .vv-font-controls {
   display: inline-flex;
-  border: 1px solid #4a5568;
+  border: 1px solid #354b6e;
   border-radius: 2px;
   overflow: hidden;
 }
 
 .vv-header-btn {
-  background: #364352;
+  background: #1f3354;
   color: #e2e8f0;
-  border: 1px solid #4a5568;
+  border: 1px solid #354b6e;
   padding: 2px 6px;
   font-size: calc(var(--vv-base-font) - 1px);
-  font-weight: 700;
+  font-weight: 600;
   border-radius: 2px;
   cursor: pointer;
   height: 22px;
@@ -136,7 +149,7 @@ body {
 
 .vv-font-controls .vv-header-btn {
   border: none;
-  border-right: 1px solid #4a5568;
+  border-right: 1px solid #354b6e;
   border-radius: 0;
   padding: 2px 5px;
 }
@@ -146,14 +159,14 @@ body {
 }
 
 .vv-header-btn:hover {
-  background: #465568;
+  background: #2b446e;
   color: #ffffff;
 }
 
 .vv-header-btn-danger {
-  background: #4a2323;
+  background: #421f24;
   color: #ffcdd2;
-  border-color: #8c3838;
+  border-color: #7d353b;
 }
 
 .vv-header-btn-danger:hover {
@@ -169,8 +182,8 @@ body {
   padding: 2px 7px;
   height: 22px;
   border-radius: 2px;
-  border: 1px solid #4a5568;
-  background: #364352;
+  border: 1px solid #354b6e;
+  background: #1f3354;
   color: #e2e8f0;
   font-size: calc(var(--vv-base-font) - 1px);
   font-weight: 600;
@@ -187,7 +200,7 @@ body {
 
 .vv-status-toggle.active {
   border-color: #4caf50;
-  background: #233829;
+  background: #1c3829;
   color: #ffffff;
 }
 
@@ -195,7 +208,7 @@ body {
   background: #4caf50;
 }
 
-/* Enterprise Collapsible Sections */
+/* Enterprise Collapsible Sections (Veeva Accordion & Details Style) */
 .vv-section {
   background: var(--vv-surface);
   border-bottom: 1px solid var(--vv-border);
@@ -204,17 +217,17 @@ body {
 
 .vv-section-header {
   background: var(--vv-section-bar);
-  padding: 4px 8px;
+  padding: 5px 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
   user-select: none;
-  border-bottom: 1px solid var(--vv-border);
+  border-bottom: 2px solid var(--vv-orange);
 }
 
 .vv-section-header:hover {
-  background: #e1e4e8;
+  background: #e8eaed;
 }
 
 .vv-session-info {
@@ -225,10 +238,10 @@ body {
 }
 
 .vv-section-title {
-  font-size: calc(var(--vv-base-font) - 1px);
+  font-size: calc(var(--vv-base-font) - 0.5px);
   font-weight: 700;
-  color: #42526e;
-  letter-spacing: 0.25px;
+  color: #222222;
+  letter-spacing: 0.2px;
 }
 
 .vv-badge {
@@ -381,7 +394,7 @@ select {
   width: 100%;
   height: 24px;
   padding: 2px 6px;
-  border: 1px solid var(--vv-border-strong);
+  border: 1px solid #cccccc;
   border-radius: 2px;
   font-family: inherit;
   font-size: var(--vv-base-font);
@@ -394,7 +407,8 @@ input[type="password"]:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--vv-blue);
+  border-color: #b8a45c;
+  background-color: var(--vv-active-input-bg);
 }
 
 .vv-action-row {
@@ -410,14 +424,14 @@ textarea:focus {
   font-weight: 600;
 }
 
-/* Enterprise Compact Buttons */
+/* Authentic Veeva Vault RIM Buttons (+ Create Royal Blue & Neutral Apply/Secondary) */
 .vv-btn {
   height: 24px;
-  padding: 0 8px;
+  padding: 0 9px;
   font-family: inherit;
   font-size: var(--vv-base-font);
   font-weight: 700;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
   white-space: nowrap;
   display: inline-flex;
@@ -426,23 +440,26 @@ textarea:focus {
 }
 
 .vv-btn-primary {
-  background: var(--vv-orange);
+  background: linear-gradient(180deg, #1f66b9 0%, #165199 100%);
   color: #ffffff;
-  border: 1px solid #d97a0b;
+  border: 1px solid #124380;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .vv-btn-primary:hover {
-  background: var(--vv-orange-hover);
+  background: linear-gradient(180deg, #1959a8 0%, #11417d 100%);
 }
 
 .vv-btn-secondary {
-  background: #ffffff;
-  color: #333333;
-  border: 1px solid var(--vv-border-strong);
+  background: linear-gradient(180deg, #ffffff 0%, #f2f3f5 100%);
+  color: #222222;
+  border: 1px solid #bdbdbd;
+  font-weight: 600;
 }
 
 .vv-btn-secondary:hover {
-  background: #f4f5f7;
+  background: #eaeced;
+  border-color: #a6a6a6;
 }
 
 .vv-btn-danger-link {
@@ -563,34 +580,62 @@ textarea:focus {
   margin-top: 2px;
 }
 
-/* Veeva Sunrise Navigation Tabs */
+/* Authentic Veeva Secondary App Navigation Bar (with 3x3 Grid Icon & Top Orange Active Tab) */
 .vv-nav-tabs {
   display: flex;
+  align-items: stretch;
   background: #ffffff;
-  border-bottom: 1px solid var(--vv-border);
+  border-bottom: 1px solid #d8dde6;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
   padding: 0 6px;
   flex-shrink: 0;
+}
+
+.vv-app-grid-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px 0 3px;
+  margin-right: 2px;
+  color: #14233c;
+  border-right: 1px solid #ebecf0;
 }
 
 .ws-tab {
   background: transparent;
   border: none;
+  border-top: 3px solid transparent;
   border-bottom: 2px solid transparent;
-  padding: 5px 8px 4px 8px;
+  padding: 6px 9px 5px 9px;
   font-family: inherit;
   font-size: var(--vv-base-font);
-  font-weight: 700;
-  color: var(--vv-text-muted);
+  font-weight: 600;
+  color: #333333;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ws-tab .vv-tab-caret {
+  font-size: 9px;
+  color: #666666;
 }
 
 .ws-tab:hover {
-  color: var(--vv-text);
+  color: #14233c;
+  background: #f7f8fa;
 }
 
 .ws-tab.active {
-  color: #2b3643;
-  border-bottom-color: var(--vv-orange);
+  color: #14233c;
+  font-weight: 700;
+  border-top-color: var(--vv-orange);
+  background: #ffffff;
+}
+
+.ws-tab.active .vv-tab-caret {
+  color: #14233c;
 }
 
 .ws-view {
@@ -654,10 +699,11 @@ textarea:focus {
 .step-card,
 .vv-card {
   background: #ffffff;
-  border: 1px solid var(--vv-border);
-  border-top: 2px solid #42526e;
+  border: 1px solid #d8dde6;
+  border-top: 2px solid var(--vv-orange);
   border-radius: 2px;
   padding: 5px 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .step-card.text-step {
@@ -669,21 +715,23 @@ textarea:focus {
 }
 
 .step-card.component-card {
-  border-top-color: #2b3643;
+  border-top-color: var(--vv-navy);
 }
 
 .step-card.active-target {
-  border-color: var(--vv-orange);
-  box-shadow: 0 0 0 1px rgba(247, 148, 29, 0.25);
+  border-color: #4a607a;
+  border-top: 2px solid var(--vv-orange);
+  background: var(--vv-selected-cell-bg);
+  box-shadow: 0 1px 4px rgba(20, 35, 60, 0.12);
 }
 
 .active-target-pill {
-  background: #fff3e0;
-  color: #b45309;
-  border: 1px solid #f7941d;
+  background: var(--vv-orange);
+  color: #ffffff;
+  border: 1px solid #d97a0b;
   font-size: calc(var(--vv-base-font) - 1.5px);
   font-weight: 700;
-  padding: 0px 4px;
+  padding: 0px 5px;
   border-radius: 2px;
   margin-left: 5px;
 }
@@ -694,9 +742,9 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
-  padding-bottom: 3px;
-  border-bottom: 1px solid #ebecf0;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid var(--vv-orange);
   gap: 6px;
 }
 
@@ -906,7 +954,8 @@ textarea:focus {
 
 .step-card.active-target .step-textarea {
   min-height: 92px;
-  border-color: #90caf9;
+  background-color: var(--vv-active-input-bg);
+  border-color: #c5b67c;
 }
 
 /* Maximized / Fullscreen Step Card */

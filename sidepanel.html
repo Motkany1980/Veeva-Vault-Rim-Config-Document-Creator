@@ -7,12 +7,11 @@
   <link rel="stylesheet" href="sidepanel.css" />
 </head>
 <body class="font-compact">
-  <!-- Veeva Vault Style Compact Top Header Bar -->
+  <!-- Veeva Vault RIM Authentic Deep Navy Top Header Bar -->
   <header class="vv-header">
     <div class="vv-brand">
-      <img src="icons/icon.svg" alt="Vault Icon" class="vv-brand-icon" />
       <div class="vv-brand-text">
-        <span class="vv-brand-name">Vault RIM</span>
+        <span class="vv-logo-veeva">Veeva</span><span class="vv-logo-rim">RIM</span>
         <span class="vv-brand-sep">|</span>
         <span class="vv-brand-module">Config Doc</span>
       </div>
@@ -23,7 +22,7 @@
         <button id="btnFontLarger" class="vv-header-btn" title="Larger font size">A+</button>
       </div>
       <button id="btnPopoutWindow" class="vv-header-btn" title="Open in a separate resizable floating window">
-        Pop-out Window
+        Pop-out
       </button>
       <button id="btnResetEverythingHeader" class="vv-header-btn vv-header-btn-danger" title="Reset and clear all steps, screenshots, components, and entered fields">
         Reset All
@@ -233,19 +232,32 @@
     </div>
   </section>
 
-  <!-- Veeva Sunrise Primary Navigation Tabs -->
+  <!-- Veeva Sunrise Primary Navigation Tabs (with 3x3 App Switcher Grid Icon) -->
   <nav class="vv-nav-tabs">
+    <span class="vv-app-grid-icon" title="Veeva Vault RIM Workspace Views" aria-hidden="true">
+      <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor">
+        <rect x="1" y="1" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="6.25" y="1" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="11.5" y="1" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="1" y="6.25" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="6.25" y="6.25" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="11.5" y="6.25" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="1" y="11.5" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="6.25" y="11.5" width="3.5" height="3.5" rx="0.5"/>
+        <rect x="11.5" y="11.5" width="3.5" height="3.5" rx="0.5"/>
+      </svg>
+    </span>
     <button class="ws-tab active" data-wstab="steps">
-      Steps (<span id="countSteps">0</span>)
+      Steps (<span id="countSteps">0</span>) <span class="vv-tab-caret">▾</span>
     </button>
     <button class="ws-tab" data-wstab="components">
-      Components (<span id="countComponents">0</span>)
+      Components (<span id="countComponents">0</span>) <span class="vv-tab-caret">▾</span>
     </button>
     <button class="ws-tab" data-wstab="preview">
       Preview
     </button>
     <button class="ws-tab" data-wstab="adminpro">
-      VQL &amp; Project
+      Admin &amp; VQL <span class="vv-tab-caret">▾</span>
     </button>
   </nav>
 

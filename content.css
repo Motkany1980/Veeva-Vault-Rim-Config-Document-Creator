@@ -1,9 +1,9 @@
-/* content.css - Veeva Vault Sunrise UI Style In-Page Overlays */
+/* content.css - Authentic Veeva Vault RIM (Sunrise UI) In-Page Overlays */
 
 .vv-doc-highlight-target {
   outline: 2px solid #f7941d !important;
   outline-offset: 1px !important;
-  background-color: rgba(247, 148, 29, 0.08) !important;
+  background-color: rgba(253, 242, 228, 0.55) !important;
 }
 
 .vv-doc-screenshot-box {
@@ -15,16 +15,16 @@
   position: fixed;
   z-index: 2147483647;
   pointer-events: none;
-  background: #2b3643;
+  background: #14233c;
   color: #ffffff;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif;
   font-size: 11.5px;
   font-weight: 600;
   line-height: 1.35;
   padding: 5px 9px;
-  border-radius: 2px;
+  border-radius: 3px;
   border-top: 2px solid #f7941d;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 3px 10px rgba(20, 35, 60, 0.3);
   max-width: 460px;
   white-space: nowrap;
   overflow: hidden;
@@ -49,14 +49,14 @@
   right: 16px;
   z-index: 2147483646;
   pointer-events: none;
-  background: #2b3643;
+  background: #14233c;
   color: #ffffff;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif;
   font-size: 12px;
   padding: 7px 12px;
-  border-radius: 2px;
+  border-radius: 3px;
   border-left: 3px solid #f7941d;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 12px rgba(20, 35, 60, 0.3);
   opacity: 0;
   transform: translateY(6px);
   transition: opacity 0.15s ease, transform 0.15s ease;
@@ -76,14 +76,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #2b3643;
+  background: #14233c;
   color: #ffffff;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif;
   font-size: 11px;
   padding: 5px 10px;
-  border-radius: 2px;
+  border-radius: 3px;
   border-top: 2px solid #f7941d;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 2px 8px rgba(20, 35, 60, 0.28);
   user-select: none;
 }
 
@@ -101,8 +101,8 @@
 #vv-doc-floating-hud .vv-hud-key {
   padding: 2px 6px;
   border-radius: 2px;
-  background: #3b4859;
-  border: 1px solid #4a5568;
+  background: #1f3354;
+  border: 1px solid #354b6e;
   color: #e2e8f0;
   font-weight: 600;
   cursor: pointer;
@@ -114,22 +114,21 @@
   color: #ffffff;
 }
 
-/* Injected Veeva Vault Object Schema Table Search Bar */
+/* Injected Veeva Vault Object Schema & Fields Table Filter Bar (matches Veeva Audit/Admin Filter Bar) */
 .vv-doc-schema-search-bar {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 8px 12px;
-  margin: 6px 0 8px 0;
-  background: #f8f9fa;
+  padding: 7px 12px;
+  margin: 4px 0 8px 0;
+  background: #f2f3f5;
   border: 1px solid #d8dde6;
-  border-left: 3px solid #f7941d;
+  border-bottom: 2px solid #f7941d;
   border-radius: 2px;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif;
   font-size: 12px;
-  color: #2b3643;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  color: #222222;
 }
 
 .vv-doc-schema-search-bar .vv-schema-search-brand {
@@ -138,16 +137,28 @@
   gap: 5px;
   font-weight: 700;
   font-size: 11.5px;
-  color: #2b3643;
+  color: #1959a8;
   white-space: nowrap;
 }
 
 .vv-doc-schema-search-bar .vv-schema-search-brand-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  background: #f7941d;
-  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1959a8;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.vv-doc-schema-search-bar .vv-schema-search-brand-dot::after {
+  content: "+";
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .vv-doc-schema-search-bar .vv-schema-input-wrap {
@@ -161,12 +172,12 @@
 
 .vv-doc-schema-search-bar .vv-schema-search-input {
   width: 100%;
-  height: 28px !important;
-  padding: 3px 28px 3px 10px !important;
-  border: 1px solid #c5ccd6 !important;
+  height: 26px !important;
+  padding: 2px 26px 2px 8px !important;
+  border: 1px solid #cccccc !important;
   border-radius: 2px !important;
   background: #ffffff !important;
-  color: #2b3643 !important;
+  color: #222222 !important;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
   font-size: 12px !important;
   line-height: 1.3 !important;
@@ -176,8 +187,8 @@
 }
 
 .vv-doc-schema-search-bar .vv-schema-search-input:focus {
-  border-color: #1a73e8 !important;
-  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15) !important;
+  border-color: #b8a45c !important;
+  background-color: #fffde7 !important;
 }
 
 .vv-doc-schema-search-bar .vv-schema-clear-btn {
@@ -201,12 +212,12 @@
 }
 
 .vv-doc-schema-search-bar .vv-schema-select {
-  height: 28px !important;
+  height: 26px !important;
   padding: 2px 8px !important;
-  border: 1px solid #c5ccd6 !important;
+  border: 1px solid #cccccc !important;
   border-radius: 2px !important;
   background: #ffffff !important;
-  color: #2b3643 !important;
+  color: #222222 !important;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
   font-size: 12px !important;
   cursor: pointer;
@@ -214,17 +225,17 @@
 }
 
 .vv-doc-schema-search-bar .vv-schema-select:focus {
-  border-color: #1a73e8 !important;
+  border-color: #b8a45c !important;
+  background-color: #fffde7 !important;
 }
 
 .vv-doc-schema-search-bar .vv-schema-count-badge {
   font-size: 11.5px;
-  font-weight: 600;
-  color: #42526e;
-  background: #eaeced;
-  border: 1px solid #d8dde6;
-  padding: 3px 8px;
-  border-radius: 2px;
+  font-weight: 700;
+  font-style: italic;
+  color: #222222;
+  background: transparent;
+  padding: 2px 6px;
   white-space: nowrap;
 }
 
@@ -241,37 +252,45 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
   position: relative;
 }
 
+body.vv-doc-schema-tools-enabled .vault_admin_vof_object_schema td[data-column-name="name"]:hover,
+body.vv-doc-schema-tools-enabled .vv_vobject_list td[data-column-name="name"]:hover,
+body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(2):hover,
+body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4):hover {
+  background-color: #fdf2e4 !important;
+  outline: 1px solid #4a607a;
+}
+
 body.vv-doc-schema-tools-enabled .vault_admin_vof_object_schema td[data-column-name="name"]:hover .vv_text_cell,
 body.vv-doc-schema-tools-enabled .vv_vobject_list td[data-column-name="name"]:hover .vv_text_cell,
 body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(2):hover span,
 body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4):hover span {
-  color: #1a73e8 !important;
-  text-decoration: underline dotted #f7941d;
+  color: #1662b4 !important;
+  text-decoration: underline;
 }
 
-/* Object & Field Inspector Popup */
+/* Object & Field Inspector Popup (matches Veeva App Switcher & Admin Popup Card) */
 #vv-doc-object-fields-popup {
   position: fixed;
   z-index: 2147483644;
   width: 440px;
   max-height: 450px;
   background: #ffffff;
-  border: 1px solid #c5ccd6;
-  border-top: 3px solid #f7941d;
-  border-radius: 2px;
-  box-shadow: 0 8px 24px rgba(43, 54, 67, 0.28);
+  border: 1px solid #d8dde6;
+  border-radius: 4px;
+  box-shadow: 0 3px 14px rgba(20, 35, 60, 0.24);
   display: none;
   flex-direction: column;
   font-family: Arial, Helvetica, "Segoe UI", sans-serif;
   font-size: 12px;
-  color: #2b3643;
+  color: #222222;
   overflow: hidden;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-header {
-  background: #2b3643;
+  background: #14233c;
   color: #ffffff;
   padding: 8px 10px;
+  border-bottom: 2px solid #f7941d;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -310,28 +329,29 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 
 #vv-doc-object-fields-popup .vv-fpop-goto-btn,
 #vv-doc-object-fields-popup .vv-fpop-target-btn {
-  background: #f7941d;
+  background: linear-gradient(180deg, #1f66b9 0%, #165199 100%);
   color: #ffffff;
-  border: 1px solid #d97a0b;
-  border-radius: 2px;
+  border: 1px solid #124380;
+  border-radius: 3px;
   padding: 3px 8px;
   font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 #vv-doc-object-fields-popup .vv-fpop-target-btn {
-  background: #1a73e8;
-  border-color: #1558b0;
+  background: #f7941d;
+  border-color: #d97a0b;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-goto-btn:hover {
-  background: #e07f0b;
+  background: linear-gradient(180deg, #1959a8 0%, #11417d 100%);
 }
 
 #vv-doc-object-fields-popup .vv-fpop-target-btn:hover {
-  background: #1558b0;
+  background: #e07f0b;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-close-btn {
@@ -351,10 +371,10 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 
 #vv-doc-object-fields-popup .vv-fpop-meta-strip {
   padding: 6px 10px;
-  background: #fff8f0;
-  border-bottom: 1px solid #f2dec4;
+  background: #fdf2e4;
+  border-bottom: 1px solid #ebdccb;
   font-size: 11px;
-  color: #334155;
+  color: #222222;
   display: none;
   flex-wrap: wrap;
   gap: 6px 12px;
@@ -362,16 +382,16 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 }
 
 #vv-doc-object-fields-popup .vv-fpop-meta-strip strong {
-  color: #2b3643;
+  color: #14233c;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-section-banner {
   padding: 4px 10px;
-  background: #eaeced;
+  background: #f2f3f5;
   border-bottom: 1px solid #d8dde6;
   font-size: 10.5px;
   font-weight: 700;
-  color: #42526e;
+  color: #333333;
   text-transform: uppercase;
   letter-spacing: 0.3px;
   display: none;
@@ -381,8 +401,8 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 
 #vv-doc-object-fields-popup .vv-fpop-search-row {
   padding: 6px 8px;
-  background: #f4f5f7;
-  border-bottom: 1px solid #d8dde6;
+  background: #f7f8fa;
+  border-bottom: 1px solid #e1e4e8;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -390,18 +410,19 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 
 #vv-doc-object-fields-popup .vv-fpop-search-input {
   flex: 1;
-  height: 26px !important;
+  height: 25px !important;
   padding: 2px 8px !important;
-  border: 1px solid #c5ccd6 !important;
+  border: 1px solid #cccccc !important;
   border-radius: 2px !important;
   font-size: 11.5px !important;
-  color: #2b3643 !important;
+  color: #222222 !important;
   background: #ffffff !important;
   outline: none !important;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-search-input:focus {
-  border-color: #1a73e8 !important;
+  border-color: #b8a45c !important;
+  background-color: #fffde7 !important;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-list {
@@ -416,13 +437,13 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
   justify-content: space-between;
   gap: 8px;
   padding: 6px 10px;
-  border-bottom: 1px solid #f0f2f5;
+  border-bottom: 1px solid #ebebeb;
   cursor: pointer;
   transition: background 0.1s ease;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-item:hover {
-  background: #fff8f0;
+  background: #fdf2e4;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-item-main {
@@ -433,7 +454,7 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 #vv-doc-object-fields-popup .vv-fpop-item-label {
   font-weight: 600;
   font-size: 12px;
-  color: #1a73e8;
+  color: #1662b4;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -446,7 +467,7 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 #vv-doc-object-fields-popup .vv-fpop-item-name {
   font-family: Consolas, "Courier New", monospace;
   font-size: 11px;
-  color: #5e6c84;
+  color: #555555;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -464,9 +485,9 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 2px;
-  background: #eaeced;
-  color: #42526e;
-  border: 1px solid #d8dde6;
+  background: #f2f3f5;
+  color: #333333;
+  border: 1px solid #cccccc;
   max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
@@ -476,29 +497,30 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 #vv-doc-object-fields-popup .vv-fpop-open-hint {
   font-size: 10.5px;
   font-weight: 700;
-  color: #c85a08;
+  color: #1959a8;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-footer {
   padding: 5px 10px;
-  background: #f4f5f7;
+  background: #f2f3f5;
   border-top: 1px solid #d8dde6;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 11px;
-  color: #5e6c84;
+  color: #555555;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-count {
   font-weight: 700;
-  color: #2b3643;
+  font-style: italic;
+  color: #222222;
 }
 
 #vv-doc-object-fields-popup .vv-fpop-status {
   padding: 16px 12px;
   text-align: center;
-  color: #5e6c84;
+  color: #555555;
   font-size: 12px;
 }
 
@@ -507,7 +529,7 @@ body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4
 }
 
 .vv-doc-target-field-highlight {
-  outline: 2px solid #f7941d !important;
-  background-color: #fff8e1 !important;
+  outline: 2px solid #4a607a !important;
+  background-color: #fdf2e4 !important;
   transition: background-color 0.4s ease;
 }

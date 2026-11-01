@@ -1,7 +1,7 @@
 // content.js - Veeva Vault RIM Config Documenter In-Page Handler
 
 (function () {
-  const CURRENT_SCRIPT_VERSION = 5;
+  const CURRENT_SCRIPT_VERSION = 6;
   if (window.__vvRimDocumenterVersion === CURRENT_SCRIPT_VERSION) {
     if (typeof window.__vvRimDocumenterResync === 'function') {
       try {

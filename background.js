@@ -33,51 +33,53 @@ function updateToolbarAppIcon(isRecording = true) {
       ctx.save();
       ctx.scale(s, s);
 
-      // 1. Flat Enterprise Charcoal Base (#2B3643) with Veeva Orange Top Bar (#F7941D)
+      // 1. Veeva Deep Navy Base (#14233C) with Veeva Orange Top Accent (#F7941D)
       drawRoundRect(ctx, 6, 6, 116, 116, 16);
-      ctx.fillStyle = '#2B3643';
+      ctx.fillStyle = '#14233C';
       ctx.fill();
 
       // Top Orange Bar
       ctx.fillStyle = '#F7941D';
-      drawRoundRect(ctx, 6, 6, 116, 24, 16);
+      drawRoundRect(ctx, 6, 6, 116, 22, 16);
       ctx.fill();
-      ctx.fillRect(6, 18, 116, 12);
+      ctx.fillRect(6, 18, 116, 10);
 
-      // 2. White Config Document Sheet
+      // 2. White Config Document Sheet with Orange Section Rule
       ctx.fillStyle = '#FFFFFF';
       drawRoundRect(ctx, 26, 22, 72, 86, 4);
       ctx.fill();
+      ctx.fillStyle = '#F7941D';
+      ctx.fillRect(26, 36, 72, 4);
 
       // 3. Veeva Orange "V" mark inside document
       ctx.beginPath();
-      ctx.moveTo(38, 44);
-      ctx.lineTo(48, 68);
-      ctx.lineTo(58, 44);
+      ctx.moveTo(38, 48);
+      ctx.lineTo(48, 70);
+      ctx.lineTo(58, 48);
       ctx.lineWidth = 7;
       ctx.strokeStyle = '#F7941D';
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.stroke();
 
-      // 4. Clean Enterprise Config Lines
-      ctx.fillStyle = '#2B3643';
-      ctx.fillRect(66, 46, 22, 6);
+      // 4. Clean Enterprise Config Lines (Veeva Royal Blue & Navy)
+      ctx.fillStyle = '#1959A8';
+      ctx.fillRect(66, 48, 22, 6);
       ctx.fillStyle = '#7A869A';
-      ctx.fillRect(66, 58, 16, 6);
+      ctx.fillRect(66, 60, 16, 6);
 
-      ctx.fillStyle = '#2B3643';
-      ctx.fillRect(38, 78, 50, 6);
+      ctx.fillStyle = '#14233C';
+      ctx.fillRect(38, 80, 50, 6);
       ctx.fillStyle = '#7A869A';
-      ctx.fillRect(38, 90, 36, 6);
+      ctx.fillRect(38, 92, 36, 6);
 
       // 5. Status Indicator Dot (Bottom-Right)
       ctx.beginPath();
       ctx.arc(102, 102, 14, 0, Math.PI * 2);
-      ctx.fillStyle = isRecording ? '#2E7D32' : '#7A869A';
+      ctx.fillStyle = isRecording ? '#1959A8' : '#7A869A';
       ctx.fill();
       ctx.lineWidth = 4;
-      ctx.strokeStyle = '#2B3643';
+      ctx.strokeStyle = '#14233C';
       ctx.stroke();
 
       ctx.restore();
