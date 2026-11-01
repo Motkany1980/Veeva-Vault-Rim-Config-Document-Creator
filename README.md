@@ -2,6 +2,29 @@
 
 Chrome and Microsoft Edge browser extension (Manifest V3) for Veeva Vault Administrators and Configuration Engineers. It records configuration steps, UI navigation paths, screenshots, and modified components (`vault_component__v`) while you work in Vault, and exports everything into a formatted Microsoft Word (`.docx`) document.
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="Images/Veeva%20Documentator%201.png" width="300">
+    </td>
+    <td align="center">
+      <img src="Images/Veeva%20Documentator%202.png" width="300">
+    </td>
+    <td align="center">
+      <img src="Images/Veeva%20Documentator%203.png" width="300">
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="Images/Veeva%20Documentator%204.png" width="300">
+    </td>
+    <td align="center">
+      <img src="Images/Veeva%20Documentator%205.png" width="300">
+    </td>
+    <td></td>
+  </tr>
+</table>
+
 > **Read-Only Guarantee:** All communication with Veeva Vault REST APIs is strictly **read-only** (`GET` and `VQL SELECT` queries only). The extension never creates, updates, or deletes data in Vault.
 
 ---
