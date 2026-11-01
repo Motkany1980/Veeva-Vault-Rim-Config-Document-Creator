@@ -166,3 +166,9 @@ Component Type : Report
 └── icons/
     └── icon.svg           # Vector application icon
 ```
+
+**This browser extension is an independent tool and is not developed, provided, endorsed, supported, or maintained by Veeva Systems.
+Use of this extension is entirely at your own risk. The author assumes no responsibility or liability for any direct or indirect damage, data loss, configuration changes, security issues, system errors, service interruptions, or other problems that may result from the installation or use of this extension.
+Users are responsible for verifying that the use of this extension complies with their organization's internal policies, security requirements, and applicable procedures before installing or using it in any Veeva Vault environment.
+It is strongly recommended to evaluate and test the extension in a non-production environment before considering its use with production systems.
+By installing or using this extension, you acknowledge and accept these conditions.**
