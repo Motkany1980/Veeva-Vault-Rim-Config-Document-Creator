@@ -106,7 +106,12 @@
         <span class="vv-caret" id="caretShortcuts">▾</span>
         <span class="vv-section-title">CONTROLS &amp; SETTINGS</span>
       </div>
-      <span style="font-size:10px;color:#5e6c84;">Click header to collapse/expand</span>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <button id="btnToggleSchemaTools" class="vv-schema-toggle-btn" title="Enable/Disable Object Schema Table Search &amp; Object Name Field Inspector Popup on the Veeva Objects page">
+          <span class="vv-schema-toggle-dot"></span>
+          <span id="schemaToolsStatusText">Object Schema Filter: OFF</span>
+        </button>
+      </div>
     </div>
 
     <div id="shortcutsPanelBody">
@@ -162,6 +167,10 @@
           <label class="vv-checkbox">
             <input type="checkbox" id="chkShowHud" checked />
             <span>Show floating helper bar in the bottom-right corner of the Veeva page</span>
+          </label>
+          <label class="vv-checkbox">
+            <input type="checkbox" id="chkEnableSchemaTools" />
+            <span>Enable <strong>Object Schema Table Filter &amp; Field Inspector Popup</strong> on Veeva <code>Objects</code> page <em>(Default: OFF)</em></span>
           </label>
 
           <div class="vv-field-group" style="margin-top:4px;">

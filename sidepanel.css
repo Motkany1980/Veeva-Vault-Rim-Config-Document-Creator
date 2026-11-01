@@ -259,6 +259,44 @@ body {
   text-transform: none;
 }
 
+.vv-schema-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  height: 19px;
+  border-radius: 2px;
+  border: 1px solid #c5ccd6;
+  background: #ffffff;
+  color: #42526e;
+  font-size: calc(var(--vv-base-font) - 1.5px);
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.vv-schema-toggle-btn:hover {
+  border-color: var(--vv-orange);
+  color: #2b3643;
+}
+
+.vv-schema-toggle-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9aa5b1;
+}
+
+.vv-schema-toggle-btn.active {
+  background: #e8f5e9;
+  border-color: #66bb6a;
+  color: #1b5e20;
+}
+
+.vv-schema-toggle-btn.active .vv-schema-toggle-dot {
+  background: #2e7d32;
+}
+
 .vv-dns-text {
   font-size: calc(var(--vv-base-font) - 1px);
   color: var(--vv-text-muted);

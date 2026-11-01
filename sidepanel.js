@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const chkHighlightScreenshot = document.getElementById('chkHighlightScreenshot');
   const chkAppendComponents = document.getElementById('chkAppendComponents');
   const chkShowHud = document.getElementById('chkShowHud');
+  const chkEnableSchemaTools = document.getElementById('chkEnableSchemaTools');
+  const btnToggleSchemaTools = document.getElementById('btnToggleSchemaTools');
+  const schemaToolsStatusText = document.getElementById('schemaToolsStatusText');
   const selMode1Style = document.getElementById('selMode1Style');
   const selComponentsFormat = document.getElementById('selComponentsFormat');
 
@@ -115,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
     showFloatingHud: true,
     appendComponentsToDoc: true,
     componentsFormat: 'text',
-    fontScale: 'font-compact'
+    fontScale: 'font-compact',
+    enableObjectSchemaTools: false
   };
   let docMeta = {
     title: 'Veeva Vault RIM Configuration Steps',
@@ -133,8 +137,125 @@ document.addEventListener('DOMContentLoaded', () => {
     userName: ''
   };
 
-  // Ensure content.js is injected in all open Veeva tabs immediately when Side Panel opens
-  chrome.runtime.sendMessage({ type: 'ENSURE_CONTENT_SCRIPTS' }).catch(() => {});
+  // Ensure content.css and content.js are injected in all open tabs and sync HttpOnly TK cookies
+  async function ensureContentScriptsAndTokensInTabs() {
+    chrome.runtime.sendMessage({ type: 'ENSURE_CONTENT_SCRIPTS' }).catch(() => {});
+    try {
+      const tabs = await chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] });
+      const cookieTokensByHost = {};
+      const cookieTokenList = [];
+      const pushToken = (val) => {
+        if (val && typeof val === 'string' && val.length > 15 && !cookieTokenList.includes(val)) {
+          cookieTokenList.push(val);
+        }
+      };
+
+      for (const tab of tabs) {
+        if (!tab.id || !tab.url) continue;
+        try {
+          const parsed = new URL(tab.url);
+          if (chrome.cookies && chrome.cookies.getAll) {
+            const byOrigin = await chrome.cookies.getAll({ url: parsed.origin }).catch(() => []);
+            const byDomain = await chrome.cookies
+              .getAll({ domain: parsed.hostname })
+              .catch(() => []);
+            const byVeevaRoot = parsed.hostname.includes('veevavault.com')
+              ? await chrome.cookies.getAll({ domain: 'veevavault.com' }).catch(() => [])
+              : [];
+            const allCookies = [...byOrigin, ...byDomain, ...byVeevaRoot];
+            const preferredNames = ['TK', 'vaultSessionId', 'SESSION_ID', 'veeva_session_id', 'sid'];
+            for (const name of preferredNames) {
+              const matches = allCookies.filter(
+                (c) =>
+                  c &&
+                  c.name &&
+                  c.name.toLowerCase() === name.toLowerCase() &&
+                  c.value &&
+                  c.value.length > 15
+              );
+              matches.forEach((m) => {
+                if (!cookieTokensByHost[parsed.hostname]) {
+                  cookieTokensByHost[parsed.hostname] = m.value;
+                }
+                pushToken(m.value);
+              });
+            }
+            allCookies.forEach((c) => {
+              if (
+                c &&
+                c.value &&
+                /^[A-Za-z0-9_.-]{24,512}$/.test(c.value) &&
+                !c.name.startsWith('_ga')
+              ) {
+                if (!cookieTokensByHost[parsed.hostname]) {
+                  cookieTokensByHost[parsed.hostname] = c.value;
+                }
+                pushToken(c.value);
+              }
+            });
+          }
+
+          // Also inspect MAIN world globals for Vault sessionId
+          if (chrome.scripting && parsed.hostname.includes('veevavault.com')) {
+            const mainRes = await chrome.scripting
+              .executeScript({
+                target: { tabId: tab.id },
+                world: 'MAIN',
+                func: () => {
+                  const found = [];
+                  try {
+                    if (window.Vault && window.Vault.sessionId) found.push(window.Vault.sessionId);
+                    if (window.veeva && window.veeva.sessionId) found.push(window.veeva.sessionId);
+                    if (window.Veeva && window.Veeva.sessionId) found.push(window.Veeva.sessionId);
+                    const m = (document.cookie || '').match(/(?:^|;\s*)TK=([^;]+)/);
+                    if (m && m[1]) found.push(decodeURIComponent(m[1]));
+                    for (let i = 0; i < sessionStorage.length; i++) {
+                      const k = sessionStorage.key(i);
+                      const v = sessionStorage.getItem(k);
+                      if (k && /session|ssid|tk/i.test(k) && v && v.length > 20 && v.length < 350) {
+                        found.push(v.replace(/^"|"$/g, ''));
+                      }
+                    }
+                  } catch (e) {}
+                  return found;
+                }
+              })
+              .catch(() => []);
+            if (mainRes && mainRes[0] && Array.isArray(mainRes[0].result)) {
+              mainRes[0].result.forEach((t) => {
+                if (!cookieTokensByHost[parsed.hostname]) {
+                  cookieTokensByHost[parsed.hostname] = t;
+                }
+                pushToken(t);
+              });
+            }
+          }
+        } catch (e) {}
+
+        try {
+          if (chrome.scripting) {
+            await chrome.scripting.insertCSS({
+              target: { tabId: tab.id, allFrames: true },
+              files: ['content.css']
+            });
+            await chrome.scripting.executeScript({
+              target: { tabId: tab.id, allFrames: true },
+              files: ['content.js']
+            });
+          }
+        } catch (e) {}
+      }
+
+      if (Object.keys(cookieTokensByHost).length > 0 || cookieTokenList.length > 0) {
+        chrome.storage.local.set({
+          vaultCookieTokens: cookieTokensByHost,
+          vaultCookieTokenList: cookieTokenList
+        });
+      }
+    } catch (err) {}
+  }
+
+  ensureContentScriptsAndTokensInTabs();
 
   // Pop-out Floating Window button ('Külön ablak')
   const isPopoutWindow = window.location.search.includes('window=1');
@@ -398,7 +519,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (toggleShortcutsPanel && shortcutsPanelBody) {
-    toggleShortcutsPanel.addEventListener('click', () => {
+    toggleShortcutsPanel.addEventListener('click', (e) => {
+      if (e.target.closest('#btnToggleSchemaTools')) return;
       shortcutsPanelBody.classList.toggle('collapsed');
       updateSectionCaret(shortcutsPanelBody, caretShortcuts);
       settings.shortcutsPanelCollapsed = shortcutsPanelBody.classList.contains('collapsed');
@@ -581,6 +703,23 @@ document.addEventListener('DOMContentLoaded', () => {
     settings.showFloatingHud = chkShowHud.checked;
     saveSettings();
   });
+  if (chkEnableSchemaTools) {
+    chkEnableSchemaTools.addEventListener('change', () => {
+      settings.enableObjectSchemaTools = chkEnableSchemaTools.checked;
+      saveSettings();
+      syncSettingsUi();
+      ensureContentScriptsAndTokensInTabs();
+    });
+  }
+  if (btnToggleSchemaTools) {
+    btnToggleSchemaTools.addEventListener('click', (e) => {
+      e.stopPropagation();
+      settings.enableObjectSchemaTools = !settings.enableObjectSchemaTools;
+      saveSettings();
+      syncSettingsUi();
+      ensureContentScriptsAndTokensInTabs();
+    });
+  }
   selMode1Style.addEventListener('change', () => {
     settings.mode1Style = selMode1Style.value;
     saveSettings();
@@ -656,6 +795,16 @@ document.addEventListener('DOMContentLoaded', () => {
     chkHighlightScreenshot.checked = Boolean(settings.highlightOnScreenshot);
     chkAppendComponents.checked = settings.appendComponentsToDoc !== false;
     chkShowHud.checked = Boolean(settings.showFloatingHud);
+    const schemaToolsEnabled = Boolean(settings.enableObjectSchemaTools);
+    if (chkEnableSchemaTools) {
+      chkEnableSchemaTools.checked = schemaToolsEnabled;
+    }
+    if (btnToggleSchemaTools && schemaToolsStatusText) {
+      btnToggleSchemaTools.classList.toggle('active', schemaToolsEnabled);
+      schemaToolsStatusText.textContent = schemaToolsEnabled
+        ? 'Object Schema Filter: ON'
+        : 'Object Schema Filter: OFF';
+    }
     selMode1Style.value = settings.mode1Style || 'blank_line';
     selComponentsFormat.value = settings.componentsFormat || 'text';
     applyFontScale(settings.fontScale || 'font-compact');

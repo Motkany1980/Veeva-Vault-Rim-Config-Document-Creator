@@ -10,7 +10,8 @@ const DEFAULT_SETTINGS = {
   mode1Style: 'blank_line', // 'blank_line' (\n\n) or 'sub_item' (\n   > ) or 'new_block'
   showFloatingHud: true,
   appendComponentsToDoc: true,
-  componentsFormat: 'text'
+  componentsFormat: 'text',
+  enableObjectSchemaTools: false
 };
 
 /**
@@ -306,7 +307,168 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ success: true });
     return false;
   }
+
+  if (message.type === 'FETCH_OBJECT_FIELDS') {
+    fetchVaultObjectFieldsReadOnly(message.objectName, message.pageUrl, sender.tab)
+      .then((res) => sendResponse(res))
+      .catch((err) => sendResponse({ success: false, error: err.message }));
+    return true;
+  }
 });
+
+const objectFieldsCache = new Map();
+
+async function fetchVaultObjectFieldsReadOnly(objectName, pageUrl, senderTab) {
+  const cleanObjName = (objectName || '').trim().toLowerCase();
+  if (!cleanObjName) {
+    return { success: false, error: 'Missing Object Name.' };
+  }
+
+  const store = await chrome.storage.local.get(['vaultSession']);
+  let session = store.vaultSession || {};
+  let vaultDns = session.vaultDns || '';
+  let ssid = session.ssid || '';
+
+  const targetUrl = pageUrl || senderTab?.url || '';
+  if (targetUrl && targetUrl.startsWith('http')) {
+    try {
+      const parsed = new URL(targetUrl);
+      if (parsed.hostname.includes('veevavault.com')) {
+        vaultDns = parsed.hostname;
+      }
+    } catch (e) {}
+  }
+
+  // If no SSID is connected yet, try auto-detecting from the active Veeva Vault tab
+  if (!ssid || !vaultDns) {
+    try {
+      const detected = await autoDetectVaultSession(targetUrl);
+      if (detected && detected.ssid) {
+        ssid = detected.ssid;
+      }
+      if (detected && detected.vaultDns) {
+        vaultDns = detected.vaultDns;
+      }
+    } catch (e) {}
+  }
+
+  const cacheKey = `${vaultDns || 'local'}:${cleanObjName}`;
+  if (objectFieldsCache.has(cacheKey)) {
+    return {
+      ok: true,
+      success: true,
+      cached: true,
+      objectName: cleanObjName,
+      ...objectFieldsCache.get(cacheKey)
+    };
+  }
+
+  if (!vaultDns || !ssid) {
+    return {
+      ok: false,
+      success: false,
+      needsAuth: true,
+      error:
+        'Connect SSID (click Auto-SSID in the extension) to load live Object fields from Veeva Vault.'
+    };
+  }
+
+  const apiVersions = ['v24.1', 'v23.3', 'v22.3'];
+  let lastError = 'Failed to fetch object metadata.';
+  let retriedFreshSession = false;
+
+  for (let i = 0; i < apiVersions.length; i++) {
+    const ver = apiVersions[i];
+    try {
+      const endpoint = `https://${vaultDns}/api/${ver}/metadata/vobjects/${encodeURIComponent(
+        cleanObjName
+      )}`;
+      const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: {
+          Authorization: ssid,
+          Accept: 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        lastError = `HTTP ${response.status} from Vault API`;
+        continue;
+      }
+
+      const data = await response.json();
+      if (data.responseStatus === 'SUCCESS' && data.object) {
+        const rawFields = Array.isArray(data.object.fields) ? data.object.fields : [];
+        const fields = rawFields.map((f) => {
+          const fName = f.name || '';
+          const fSource =
+            f.source ||
+            (/__c$/i.test(fName)
+              ? 'Custom'
+              : /__rim$/i.test(fName)
+              ? 'Application'
+              : /__sys$/i.test(fName)
+              ? 'System'
+              : 'Standard');
+          return {
+            name: fName,
+            label: f.label || fName,
+            type: f.type || 'Field',
+            required: Boolean(f.required),
+            editable: f.editable !== undefined ? Boolean(f.editable) : true,
+            maxLength: f.max_length || f.length || null,
+            source: fSource,
+            lookupObject:
+              f.object ||
+              f.lookup_object_name ||
+              (typeof f.object === 'object' && f.object && f.object.name) ||
+              '',
+            picklist: f.picklist || '',
+            helpContent: f.help_content || f.description || '',
+            status: Array.isArray(f.status) ? f.status[0] : f.status || 'Active'
+          };
+        });
+
+        fields.sort((a, b) => a.label.localeCompare(b.label));
+
+        const payload = {
+          objectLabel: data.object.label || cleanObjName,
+          fields
+        };
+        objectFieldsCache.set(cacheKey, payload);
+        return {
+          ok: true,
+          success: true,
+          objectName: cleanObjName,
+          ...payload
+        };
+      } else if (data.errors && data.errors[0]) {
+        const errType = data.errors[0].type || '';
+        lastError = data.errors[0].message || lastError;
+        // If stored SSID expired, re-detect fresh session cookie from browser and retry v24.1 once
+        if (!retriedFreshSession && /SESSION/i.test(errType + ' ' + lastError)) {
+          retriedFreshSession = true;
+          try {
+            const fresh = await autoDetectVaultSession(targetUrl);
+            if (fresh && fresh.ssid && fresh.ssid !== ssid) {
+              ssid = fresh.ssid;
+              i = -1; // restart loop with fresh SSID
+              continue;
+            }
+          } catch (e) {}
+        }
+      }
+    } catch (err) {
+      lastError = err.message || lastError;
+    }
+  }
+
+  return {
+    ok: false,
+    success: false,
+    error: lastError
+  };
+}
 
 async function handleUndoLastSegment() {
   const store = await chrome.storage.local.get(['docSteps']);
@@ -916,10 +1078,21 @@ async function autoDetectVaultSession(targetUrl) {
 
   if (urlToInspect && urlToInspect.startsWith('http')) {
     try {
-      const cookies = await chrome.cookies.getAll({ url: urlToInspect });
+      const parsed = new URL(urlToInspect);
+      const byOrigin = await chrome.cookies.getAll({ url: parsed.origin });
+      const byDomain = vaultDns ? await chrome.cookies.getAll({ domain: vaultDns }) : [];
+      const cookieMap = new Map();
+      [...byOrigin, ...byDomain].forEach((c) => {
+        if (c && c.name && c.value) {
+          cookieMap.set(`${c.name}:${c.path || ''}`, c);
+        }
+      });
+      const cookies = Array.from(cookieMap.values());
       const sessionCookieNames = ['TK', 'vaultSessionId', 'SESSION_ID', 'veeva_session_id', 'sid'];
       for (const name of sessionCookieNames) {
-        const match = cookies.find((c) => c.name === name && c.value && c.value.length > 15);
+        const match = cookies.find(
+          (c) => c.name.toLowerCase() === name.toLowerCase() && c.value && c.value.length > 15
+        );
         if (match) {
           detectedSsid = match.value;
           break;
@@ -927,7 +1100,7 @@ async function autoDetectVaultSession(targetUrl) {
       }
       if (!detectedSsid && vaultDns.includes('veevavault.com')) {
         const tokenCandidate = cookies.find(
-          (c) => /^[A-Za-z0-9_-]{32,256}$/.test(c.value) && !c.name.startsWith('_ga')
+          (c) => /^[A-Za-z0-9_.-]{24,512}$/.test(c.value) && !c.name.startsWith('_ga')
         );
         if (tokenCandidate) {
           detectedSsid = tokenCandidate.value;

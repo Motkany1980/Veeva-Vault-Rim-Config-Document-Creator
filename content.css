@@ -113,3 +113,401 @@
   border-color: #d97a0b;
   color: #ffffff;
 }
+
+/* Injected Veeva Vault Object Schema Table Search Bar */
+.vv-doc-schema-search-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 6px 0 8px 0;
+  background: #f8f9fa;
+  border: 1px solid #d8dde6;
+  border-left: 3px solid #f7941d;
+  border-radius: 2px;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 12px;
+  color: #2b3643;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.vv-doc-schema-search-bar .vv-schema-search-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  font-size: 11.5px;
+  color: #2b3643;
+  white-space: nowrap;
+}
+
+.vv-doc-schema-search-bar .vv-schema-search-brand-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #f7941d;
+  display: inline-block;
+}
+
+.vv-doc-schema-search-bar .vv-schema-input-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+  max-width: 460px;
+  display: flex;
+  align-items: center;
+}
+
+.vv-doc-schema-search-bar .vv-schema-search-input {
+  width: 100%;
+  height: 28px !important;
+  padding: 3px 28px 3px 10px !important;
+  border: 1px solid #c5ccd6 !important;
+  border-radius: 2px !important;
+  background: #ffffff !important;
+  color: #2b3643 !important;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.vv-doc-schema-search-bar .vv-schema-search-input:focus {
+  border-color: #1a73e8 !important;
+  box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.15) !important;
+}
+
+.vv-doc-schema-search-bar .vv-schema-clear-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #5e6c84;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 5px;
+  cursor: pointer;
+  display: none;
+}
+
+.vv-doc-schema-search-bar .vv-schema-clear-btn:hover {
+  color: #c62828;
+}
+
+.vv-doc-schema-search-bar .vv-schema-select {
+  height: 28px !important;
+  padding: 2px 8px !important;
+  border: 1px solid #c5ccd6 !important;
+  border-radius: 2px !important;
+  background: #ffffff !important;
+  color: #2b3643 !important;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
+  font-size: 12px !important;
+  cursor: pointer;
+  outline: none !important;
+}
+
+.vv-doc-schema-search-bar .vv-schema-select:focus {
+  border-color: #1a73e8 !important;
+}
+
+.vv-doc-schema-search-bar .vv-schema-count-badge {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #42526e;
+  background: #eaeced;
+  border: 1px solid #d8dde6;
+  padding: 3px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.vv-doc-schema-row-hidden {
+  display: none !important;
+}
+
+/* Hoverable Object Name & Field Name Cell Indicator (when Object Schema Tools enabled) */
+body.vv-doc-schema-tools-enabled .vault_admin_vof_object_schema td[data-column-name="name"],
+body.vv-doc-schema-tools-enabled .vv_vobject_list td[data-column-name="name"],
+body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(2),
+body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4) {
+  cursor: pointer;
+  position: relative;
+}
+
+body.vv-doc-schema-tools-enabled .vault_admin_vof_object_schema td[data-column-name="name"]:hover .vv_text_cell,
+body.vv-doc-schema-tools-enabled .vv_vobject_list td[data-column-name="name"]:hover .vv_text_cell,
+body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(2):hover span,
+body.vv-doc-schema-tools-enabled table.vv_lists_table tr.tableRow td:nth-child(4):hover span {
+  color: #1a73e8 !important;
+  text-decoration: underline dotted #f7941d;
+}
+
+/* Object & Field Inspector Popup */
+#vv-doc-object-fields-popup {
+  position: fixed;
+  z-index: 2147483644;
+  width: 440px;
+  max-height: 450px;
+  background: #ffffff;
+  border: 1px solid #c5ccd6;
+  border-top: 3px solid #f7941d;
+  border-radius: 2px;
+  box-shadow: 0 8px 24px rgba(43, 54, 67, 0.28);
+  display: none;
+  flex-direction: column;
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif;
+  font-size: 12px;
+  color: #2b3643;
+  overflow: hidden;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-header {
+  background: #2b3643;
+  color: #ffffff;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-label {
+  font-weight: 700;
+  font-size: 12.5px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-apiname {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+  color: #f7941d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-goto-btn,
+#vv-doc-object-fields-popup .vv-fpop-target-btn {
+  background: #f7941d;
+  color: #ffffff;
+  border: 1px solid #d97a0b;
+  border-radius: 2px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-target-btn {
+  background: #1a73e8;
+  border-color: #1558b0;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-goto-btn:hover {
+  background: #e07f0b;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-target-btn:hover {
+  background: #1558b0;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-close-btn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-close-btn:hover {
+  color: #ffffff;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-meta-strip {
+  padding: 6px 10px;
+  background: #fff8f0;
+  border-bottom: 1px solid #f2dec4;
+  font-size: 11px;
+  color: #334155;
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-meta-strip strong {
+  color: #2b3643;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-section-banner {
+  padding: 4px 10px;
+  background: #eaeced;
+  border-bottom: 1px solid #d8dde6;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #42526e;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-search-row {
+  padding: 6px 8px;
+  background: #f4f5f7;
+  border-bottom: 1px solid #d8dde6;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-search-input {
+  flex: 1;
+  height: 26px !important;
+  padding: 2px 8px !important;
+  border: 1px solid #c5ccd6 !important;
+  border-radius: 2px !important;
+  font-size: 11.5px !important;
+  color: #2b3643 !important;
+  background: #ffffff !important;
+  outline: none !important;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-search-input:focus {
+  border-color: #1a73e8 !important;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 290px;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  border-bottom: 1px solid #f0f2f5;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item:hover {
+  background: #fff8f0;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item-main {
+  min-width: 0;
+  flex: 1;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item-label {
+  font-weight: 600;
+  font-size: 12px;
+  color: #1a73e8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item:hover .vv-fpop-item-label {
+  text-decoration: underline;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item-name {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 11px;
+  color: #5e6c84;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-type-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  background: #eaeced;
+  color: #42526e;
+  border: 1px solid #d8dde6;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-open-hint {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #c85a08;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-footer {
+  padding: 5px 10px;
+  background: #f4f5f7;
+  border-top: 1px solid #d8dde6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #5e6c84;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-count {
+  font-weight: 700;
+  color: #2b3643;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-status {
+  padding: 16px 12px;
+  text-align: center;
+  color: #5e6c84;
+  font-size: 12px;
+}
+
+#vv-doc-object-fields-popup .vv-fpop-status.error {
+  color: #c62828;
+}
+
+.vv-doc-target-field-highlight {
+  outline: 2px solid #f7941d !important;
+  background-color: #fff8e1 !important;
+  transition: background-color 0.4s ease;
+}
